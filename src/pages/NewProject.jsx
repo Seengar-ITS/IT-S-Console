@@ -1,0 +1,7 @@
+import React,{useState,useEffect}from'react';import{supabase}from'../lib/supabase.js';import{requireAuth,getUser}from'../lib/auth.js';import*as S from'../styles.js';
+export default function NewProject(){
+  const[n,setN]=useState('');const[d,setD]=useState('');const[s,setS]=useState(false);
+  useEffect(()=>requireAuth(window.location.href),[]);
+  const create=async()=>{setS(true);const u=getUser();if(!u)return;const{data}=await supabase.from('console_projects').insert({user_id:u.sub,name:n,description:d}).select().single();if(data)window.location.href='/projects/'+data.id;setS(false);};
+  return React.createElement('div',{style:S.page},React.createElement('h1',{style:S.h1},'New Project'),React.createElement('div',{style:S.card},React.createElement('div',{style:{marginBottom:'1rem'}},React.createElement('label',{style:S.muted},'Name'),React.createElement('input',{style:{...S.input,marginTop:'0.3rem'},value:n,onChange:e=>setN(e.target.value),placeholder:'my-project'})),React.createElement('div',{style:{marginBottom:'1.5rem'}},React.createElement('label',{style:S.muted},'Description'),React.createElement('input',{style:{...S.input,marginTop:'0.3rem'},value:d,onChange:e=>setD(e.target.value),placeholder:'What is this project for?'})),React.createElement('button',{style:S.btn,onClick:create,disabled:!n||s},s?'Creating...':'Create Project')));
+}

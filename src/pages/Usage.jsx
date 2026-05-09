@@ -1,0 +1,6 @@
+import React,{useEffect,useState}from'react';import{supabase}from'../lib/supabase.js';import{requireAuth}from'../lib/auth.js';import*as S from'../styles.js';
+export default function Usage(){
+  const[rows,setRows]=useState([]);
+  useEffect(()=>{requireAuth(window.location.href);supabase.from('api_usage').select('*').order('created_at',{ascending:false}).limit(50).then(({data})=>setRows(data||[]));  },[]);
+  return React.createElement('div',{style:S.page},React.createElement('h1',{style:S.h1},'API Usage'),rows.length===0&&React.createElement('div',{style:S.card},React.createElement('p',{style:S.muted},'No API calls yet.')),rows.map(r=>React.createElement('div',{key:r.id,style:S.card},React.createElement('div',{style:{display:'flex',gap:'1rem',alignItems:'center'}},React.createElement('span',{style:S.badge(r.status_code<400?'#22c55e':'#dc2626')},r.status_code||'—'),React.createElement('span',null,r.method+' '+r.endpoint),React.createElement('span',{style:S.muted},r.response_time_ms+'ms'),React.createElement('span',{style:S.muted},new Date(r.created_at).toLocaleString())))));
+}
