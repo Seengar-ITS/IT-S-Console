@@ -1,10 +1,4 @@
 import React,{useEffect,useState}from'react';import{supabase}from'../lib/supabase.js';import{requireAuth}from'../lib/auth.js';import*as S from'../styles.js';
-export default function Home(){
-  const[s,setS]=useState({projects:0,keys:0,calls:0});
-  useEffect(()=>{requireAuth(window.location.href);Promise.all([supabase.from('console_projects').select('id',{count:'exact',head:true}),supabase.from('api_keys').select('id',{count:'exact',head:true}),supabase.from('api_usage').select('id',{count:'exact',head:true})]).then(([p,k,u])=>setS({projects:p.count||0,keys:k.count||0,calls:u.count||0}));},[]);
-  return React.createElement('div',{style:S.page},React.createElement('h1',{style:S.h1},'IT-S Console'),
-    React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:'1rem'}},
-      [['Projects',s.projects,'#7c3aed'],['API Keys',s.keys,'#0ea5e9'],['API Calls',s.calls,'#22c55e']].map(([k,v,c])=>React.createElement('div',{key:k,style:S.card},React.createElement('p',{style:S.muted},k),React.createElement('h2',{style:{...S.h2,fontSize:'2rem',color:c}},v)))
-    )
-  );
-}
+export default function Home(){const[s,setS]=useState({projects:0,keys:0,calls:0});
+useEffect(()=>{requireAuth(window.location.href);Promise.all([supabase.from('console_projects').select('id',{count:'exact',head:true}),supabase.from('api_keys').select('id',{count:'exact',head:true}),supabase.from('api_usage').select('id',{count:'exact',head:true})]).then(([p,k,u])=>setS({projects:p.count||0,keys:k.count||0,calls:u.count||0}));},[]);
+return React.createElement('div',{style:S.page},React.createElement('h1',{style:S.h1},'IT-S Console'),React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:'1rem'}},[['Projects',s.projects,'#7c3aed'],['API Keys',s.keys,'#0ea5e9'],['API Calls',s.calls,'#22c55e']].map(([k,v,c])=>React.createElement('div',{key:k,style:S.card},React.createElement('p',{style:S.muted},k),React.createElement('h2',{style:{...S.h2,fontSize:'2rem',color:c}},v)))));}
